@@ -1,0 +1,12 @@
+{
+    "files.eol": "\n",
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "prettier.arrowParens": "avoid",
+    "prettier.endOfLine": "lf",
+    "prettier.trailingComma": "all",
+    "prettier.printWidth": 100,
+    "prettier.singleQuote": true,
+    "prettier.tabWidth": 4,
+    "editor.tabSize": 4,
+    "editor.formatOnSave": true
+}
