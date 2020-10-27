@@ -62,14 +62,16 @@ function App() {
                         <ReactTooltip place="top" type="dark" effect="solid" />
                     </s.Subtitle>
                     <ReactMarkdown>{issue.body}</ReactMarkdown>
-                    <p>{issue.comments.length} comments</p>
+
+                    <s.CommentNumber>{issue.comments.length} comments</s.CommentNumber>
                     {issue.comments.map(comment => (
-                        <s.comment_body key={comment.id}>
-                            <div>
-                                {comment.created_at} {comment.user.login}:
-                            </div>
-                            <ReactMarkdown>{comment.body}</ReactMarkdown>
-                        </s.comment_body>
+                        <s.CommentContainer key={comment.id}>
+                            <s.CommentHeader>
+                                By {comment.user.login} • {moment(comment.created_at).fromNow()}
+                            </s.CommentHeader>
+
+                            <s.CommentBody>{comment.body}</s.CommentBody>
+                        </s.CommentContainer>
                     ))}
                 </div>
             ))}

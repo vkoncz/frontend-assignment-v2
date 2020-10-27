@@ -1,3 +1,4 @@
+import ReactMarkdown from 'react-markdown';
 import styled from 'styled-components';
 
 export const Container = styled.div`
@@ -22,9 +23,11 @@ export const Title = styled.p`
     font-size: 24px;
     color: #008080;
     font-weight: 700;
+    margin-bottom: 0px;
 `;
 
 export const Subtitle = styled.p`
+    margin-top: 0px;
     color: #60739f;
     font-size: 16px;
     cursor: default;
@@ -73,7 +76,26 @@ export const SubmitButton = styled.input`
     cursor: pointer;
 `;
 
-export const comment_body = styled.div`
-    margin-bottom: 32px;
-    margin-left: 64px;
+export const CommentContainer = styled.div`
+    background-color: rgba(10, 35, 92, 0.05);
+    border-radius: 8px;
+`;
+
+export const CommentHeader = styled.p`
+    color: #0a235c;
+    font-size: 16px;
+    font-weight: 700;
+    padding: 22px 24px 6px 24px;
+`;
+
+export const CommentBody = styled(ReactMarkdown)`
+    color: #0a235c;
+    font-size: 16px;
+    padding: 0px 24px 20px 24px;
+`;
+
+export const CommentNumber = styled.p`
+    font-size: 24px;
+    font-weight: 700;
+    color: #008080;
 `;
