@@ -1,22 +1,51 @@
-import React from 'react';
+import React, { FormEvent, useState } from 'react';
 import * as s from './app.styles';
 import { useGithubIssueComments } from './api/github-events.api';
 import ErrorDetails from './components/error-details';
 
 function App() {
-    const { data, isLoading, isError, error } = useGithubIssueComments();
+    const [user, setUser] = useState('');
+    const [repo, setRepo] = useState('');
 
-    if (isLoading) {
-        return <div>Loading ...</div>;
-    }
+    const { data, isLoading, isError, error, refetch } = useGithubIssueComments(user, repo);
 
-    if (isError) {
-        return <ErrorDetails error={error} />;
-    }
+    const result = () => {
+        if (isLoading) {
+            return <div>Loading ...</div>;
+        }
+
+        if (isError && error?.response?.status !== 404) {
+            return <ErrorDetails error={error} />;
+        }
+
+        if (isError) {
+            return <p>Repository cannot be found</p>;
+        }
+    };
+
+    const submit = async (event: FormEvent<HTMLElement>) => {
+        event.preventDefault();
+        await refetch();
+    };
 
     return (
         <s.container>
-            <s.header>Recent comments on TypeScript issues:</s.header>
+            <form onSubmit={submit}>
+                <input
+                    type="text"
+                    placeholder="user"
+                    onChange={event => setUser(event.target.value)}
+                />
+                <input
+                    type="text"
+                    placeholder="repo"
+                    onChange={event => setRepo(event.target.value)}
+                />
+
+                <input type="submit" value="Go fetch" />
+            </form>
+
+            <s.header>Recent comments on {repo} issues:</s.header>
             {data?.map(issue => (
                 <div key={issue.id}>
                     <s.issuer_title>{issue.title}</s.issuer_title>
@@ -31,6 +60,7 @@ function App() {
                     ))}
                 </div>
             ))}
+            {result()}
         </s.container>
     );
 }

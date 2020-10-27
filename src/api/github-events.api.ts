@@ -1,12 +1,16 @@
 import { GithubComment, GithubEvent, GithubIssue } from './github-events.model';
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import { useQuery } from 'react-query';
 
-export function useGithubIssueComments() {
-    const url = `/networks/microsoft/TypeScript/events?per_page=100`;
+export function useGithubIssueComments(user: string, repo: string) {
+    const url = `/networks/${user}/${repo}/events?per_page=100`;
 
-    return useQuery<GithubIssue[], Error>(url, () =>
-        axios.get(url).then(res => mapResult(res.data)),
+    return useQuery<GithubIssue[], AxiosError>(
+        url,
+        () => axios.get(url).then(res => mapResult(res.data)),
+        {
+            enabled: false,
+        },
     );
 }
 
