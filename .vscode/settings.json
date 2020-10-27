@@ -8,5 +8,8 @@
     "prettier.singleQuote": true,
     "prettier.tabWidth": 4,
     "editor.tabSize": 4,
-    "editor.formatOnSave": true
+    "editor.formatOnSave": true,
+    "[typescript]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    }
 }
