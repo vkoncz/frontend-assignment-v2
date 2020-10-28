@@ -6,10 +6,11 @@ import ReactMarkdown from 'react-markdown';
 import moment from 'moment';
 import ReactTooltip from 'react-tooltip';
 import Collapsible from './components/Collapsible';
+import { renderers } from './markdown/renderer';
 
 function App() {
-    const [user, setUser] = useState('facebook');
-    const [repo, setRepo] = useState('react');
+    const [user, setUser] = useState('');
+    const [repo, setRepo] = useState('');
 
     const { data, isLoading, isError, error, refetch } = useGithubIssueComments(user, repo);
 
@@ -64,7 +65,7 @@ function App() {
                     </s.Subtitle>
 
                     <Collapsible key={issue.id} commentNumber={issue.comments.length}>
-                        <ReactMarkdown>{issue.body}</ReactMarkdown>
+                        <ReactMarkdown renderers={renderers}>{issue.body}</ReactMarkdown>
                         <s.CommentNumber>{issue.comments.length} comments</s.CommentNumber>
                         {issue.comments.map(comment => (
                             <s.CommentContainer key={comment.id}>
@@ -72,7 +73,7 @@ function App() {
                                     By {comment.user.login} • {moment(comment.created_at).fromNow()}
                                 </s.CommentHeader>
 
-                                <s.CommentBody>{comment.body}</s.CommentBody>
+                                <s.CommentBody renderers={renderers}>{comment.body}</s.CommentBody>
                             </s.CommentContainer>
                         ))}
                     </Collapsible>
