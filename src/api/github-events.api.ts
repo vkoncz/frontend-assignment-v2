@@ -9,7 +9,7 @@ export function useGithubIssueComments(user: string, repo: string) {
         url,
         () => axios.get(url).then(res => mapResult(res.data)),
         {
-            enabled: false,
+            enabled: user && repo,
         },
     );
 }

@@ -1,18 +1,16 @@
-import React, { FormEvent, useState } from 'react';
-import * as s from './app.styles';
+import React, { useState } from 'react';
+import * as s from './App.styles';
 import { useGithubIssueComments } from './api/github-events.api';
-import ErrorDetails from './components/error-details';
-import ReactMarkdown from 'react-markdown';
-import moment from 'moment';
-import ReactTooltip from 'react-tooltip';
-import Collapsible from './components/Collapsible';
-import { renderers } from './markdown/renderer';
+import ErrorDetails from './components/ErrorDetails';
+import RepoForm from './components/RepoForm';
+import IssueTitle from './components/IssueTitle';
+import Issue from './components/Issue';
 
 function App() {
     const [user, setUser] = useState('');
     const [repo, setRepo] = useState('');
 
-    const { data, isLoading, isError, error, refetch } = useGithubIssueComments(user, repo);
+    const { data, isLoading, isError, error } = useGithubIssueComments(user, repo);
 
     const status = () => {
         if (isLoading) {
@@ -28,55 +26,20 @@ function App() {
         }
     };
 
-    const submit = async (event: FormEvent<HTMLElement>) => {
-        event.preventDefault();
-        await refetch();
+    const submit = (user: string, repo: string) => {
+        setUser(user);
+        setRepo(repo);
     };
 
     return (
         <s.Container>
             <s.Header>GitHub Issues and Comments</s.Header>
-            <s.Form onSubmit={submit}>
-                <s.Input
-                    type="text"
-                    placeholder="user"
-                    value={user}
-                    onChange={event => setUser(event.target.value)}
-                />
-                <s.Slash>/</s.Slash>
-                <s.Input
-                    type="text"
-                    placeholder="repo"
-                    value={repo}
-                    onChange={event => setRepo(event.target.value)}
-                />
-                <s.SubmitButton type="submit" value="Go fetch" />
-            </s.Form>
+            <RepoForm submit={submit} />
 
             {data?.map(issue => (
                 <div key={issue.id}>
-                    <s.Title>{issue.title}</s.Title>
-                    <s.Subtitle>
-                        By <s.User>{issue.user.login}</s.User> •{' '}
-                        <span data-tip={moment(issue.created_at).format('lll')}>
-                            {moment(issue.created_at).fromNow()}
-                        </span>
-                        <ReactTooltip place="top" type="dark" effect="solid" />
-                    </s.Subtitle>
-
-                    <Collapsible key={issue.id} commentNumber={issue.comments.length}>
-                        <ReactMarkdown renderers={renderers}>{issue.body}</ReactMarkdown>
-                        <s.CommentNumber>{issue.comments.length} comments</s.CommentNumber>
-                        {issue.comments.map(comment => (
-                            <s.CommentContainer key={comment.id}>
-                                <s.CommentHeader>
-                                    By {comment.user.login} • {moment(comment.created_at).fromNow()}
-                                </s.CommentHeader>
-
-                                <s.CommentBody renderers={renderers}>{comment.body}</s.CommentBody>
-                            </s.CommentContainer>
-                        ))}
-                    </Collapsible>
+                    <IssueTitle issue={issue} />
+                    <Issue issue={issue} />
                 </div>
             ))}
             {status()}
