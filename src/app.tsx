@@ -5,6 +5,7 @@ import ErrorDetails from './components/error-details';
 import ReactMarkdown from 'react-markdown';
 import moment from 'moment';
 import ReactTooltip from 'react-tooltip';
+import Collapsible from './components/Collapsible';
 
 function App() {
     const [user, setUser] = useState('facebook');
@@ -61,18 +62,20 @@ function App() {
                         </span>
                         <ReactTooltip place="top" type="dark" effect="solid" />
                     </s.Subtitle>
-                    <ReactMarkdown>{issue.body}</ReactMarkdown>
 
-                    <s.CommentNumber>{issue.comments.length} comments</s.CommentNumber>
-                    {issue.comments.map(comment => (
-                        <s.CommentContainer key={comment.id}>
-                            <s.CommentHeader>
-                                By {comment.user.login} • {moment(comment.created_at).fromNow()}
-                            </s.CommentHeader>
+                    <Collapsible key={issue.id} commentNumber={issue.comments.length}>
+                        <ReactMarkdown>{issue.body}</ReactMarkdown>
+                        <s.CommentNumber>{issue.comments.length} comments</s.CommentNumber>
+                        {issue.comments.map(comment => (
+                            <s.CommentContainer key={comment.id}>
+                                <s.CommentHeader>
+                                    By {comment.user.login} • {moment(comment.created_at).fromNow()}
+                                </s.CommentHeader>
 
-                            <s.CommentBody>{comment.body}</s.CommentBody>
-                        </s.CommentContainer>
-                    ))}
+                                <s.CommentBody>{comment.body}</s.CommentBody>
+                            </s.CommentContainer>
+                        ))}
+                    </Collapsible>
                 </div>
             ))}
             {status()}

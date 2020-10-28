@@ -26,7 +26,7 @@ export const Title = styled.p`
     margin-bottom: 0px;
 `;
 
-export const Subtitle = styled.p`
+export const Subtitle = styled.div`
     margin-top: 0px;
     color: #60739f;
     font-size: 16px;
